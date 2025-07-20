@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - Vehicle Detection</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #ff8c00, #ff2e63);
+            color: #fff;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #ff8c00, #ff2e63);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .navbar-nav .nav-link:hover {
+            text-decoration: underline;
+        }
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: url("{{ url_for('static', filename='images/a18.jpg') }}") no-repeat center center/cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .hero-section h1 {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .search-bar {
+            margin-top: 20px;
+            width: 60%;
+            padding: 10px;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            font-size: 18px;
+            text-align: center;
+        }
+        .faq-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 50px 20px;
+        }
+        .faq-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: #333;
+        }
+        .faq-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .faq-card h3 {
+            color: #c70039;
+            font-size: 20px;
+        }
+        .contact-info {
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .contact-info h2 {
+            color: #ffcc00;
+        }
+        .search-results {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Vehicle Detection</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('upload_file') }}">Upload</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('help') }}">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="hero-section">
+        <h1>How Can We Help?</h1>
+        <input type="text" class="search-bar" id="search" placeholder="Ask a question or search by keyword..." onkeyup="searchFAQ()">
+        <div class="search-results" id="search-results"></div>
+    </div>
+
+    <div class="faq-container" id="faq-container">
+        <div class="faq-card" data-question="How do I upload a video?">
+            <h3>How do I upload a video?</h3>
+            <p>Go to the Upload page, select your video file, and click "Upload" to start the analysis.</p>
+        </div>
+        <div class="faq-card" data-question="What does the system analyze?">
+            <h3>What does the system analyze?</h3>
+            <p>The system detects and counts vehicles in the uploaded video using AI algorithms.</p>
+        </div>
+        <div class="faq-card" data-question="How long does analysis take?">
+            <h3>How long does analysis take?</h3>
+            <p>Processing time depends on video length and complexity, usually a few minutes.</p>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <h2>Contact Us</h2>
+        <p>Email: support@vehicledetection.com</p>
+        <p>Phone: +1 800 567 890</p>
+        <p>Address: 123 AI Lane, Tech City,India</p>
+    </div>
+
+    <script>
+        function searchFAQ() {
+            let input = document.getElementById("search").value.toLowerCase();
+            let faqCards = document.querySelectorAll(".faq-card");
+            let resultsDiv = document.getElementById("search-results");
+            resultsDiv.innerHTML = "";
+            resultsDiv.style.display = "none";
+
+            if (input.length > 0) {
+                let results = [];
+                faqCards.forEach(card => {
+                    let question = card.getAttribute("data-question").toLowerCase();
+                    if (question.includes(input)) {
+                        results.push(`<p>${card.innerHTML}</p>`);
+                    }
+                });
+
+                if (results.length > 0) {
+                    resultsDiv.innerHTML = results.join("<hr>");
+                    resultsDiv.style.display = "block";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
